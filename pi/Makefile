@@ -1,2 +1,6 @@
+CC = g++
+FLAGS = `pkg-config opencv --cflags --libs`
+
 all:
-	g++  detectMarker.cpp -o aruco `pkg-config opencv --cflags --libs`
+	@${CC} detectMarker.cpp -o aruco ${FLAGS}
+	
