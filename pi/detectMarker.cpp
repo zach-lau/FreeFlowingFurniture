@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/aruco.hpp>
 #include <iostream>
-using namespace cv;
+using namespace cv;	
 using namespace std;
 
 //Rotation does not work for n > 1 markers
@@ -41,7 +41,7 @@ int main(int argc, char** argv )
       {
         aruco::drawAxis(imageCopy, cameraMatrix, distCoeffs, rvecs[i], tvecs[i], 0.1);
         cout << "coordinates: " << tvecs[i] << endl; //outputs the xyz values of the id marker
-        print the rotation values
+        //print the rotation values
         Rodrigues(rvecs[i], rot_vec);
         cout << "rotation xyz: ";
         for(int i=0; i<3; i++)
