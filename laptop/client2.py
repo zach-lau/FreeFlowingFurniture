@@ -23,19 +23,19 @@ def connect(server_address):
 def parseInput(line): 
 	# Turns a users command line input into an appropriate integer output
 	# If the command is not valid it will output 0 and notify the user of an unrecognized command
-
+	max_out = 200
 	if line == "forward": 
-		left = 255
-		right = 255
+		left = max_out
+		right = max_out
 	elif line == "right":
-		left = -255
-		right = 255
+		left = -max_out
+		right = max_out
 	elif line == "left":
-		left = 255
-		right = -255
+		left = max_out
+		right = -max_out
 	elif line == "back": 
-		left = -255
-		right = -255
+		left = -max_out
+		right = -max_out
 	else: 
 		left = 0
 		right = 0
