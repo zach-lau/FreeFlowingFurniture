@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import sys.path.insert(1, '../common')
+from motorcommands import *
 import socket
 import RF24
 import RPi.GPIO as GPIO
