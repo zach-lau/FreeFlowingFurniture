@@ -2,12 +2,13 @@
 import socket
 import RF24
 import RPi.GPIO as GPIO
-import time 
+import time
+import struct
 
 #Set up wifi stuff
 IPADDRESS = '192.168.1.65'
 print("Starting our server")
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((IPADDRESS,5005))
 s.listen(1)
 conn, addr = s.accept()
@@ -20,20 +21,29 @@ radio.setRetries(5,15)
 #Set up as transmitter
 radio.openWritingPipe(pipe)
 
-while 1: 
+while 1:
     try:
         #Receive from laptop
-        data = conn.recv(1024)
-        received = data.decode('utf-8')
-        print(received)
-        if not data:
+        data = conn.recv(32)
+        #print(data)
+        try:
+            received = struct.unpack("!iiiii",data)
+            print(received)
+            if not data:
+                break
+        except:
+            print("Couldn't parse data")
             break
-        #Send to arduino nano
-        output = bytes(received, "ASCII")
-        radio.write(output)
-    except: 
+        try:
+            #Send to arduino nano
+            #output = bytes(received, "ASCII")
+            output = received
+            radio.write(bytes(received[0]))
+        except:
+            print("Couldn't send to nano")
+    except:
         print("\nError")
         break
-    
-conn.close()
 
+s.close()
+conn.close()
