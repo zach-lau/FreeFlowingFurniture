@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import sys
+sys.path.insert(1, '../common')
 import tkinter as tk
 import socket
 from motorcommands import *
