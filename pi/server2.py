@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import socket
 import RF24
 import RPi.GPIO as GPIO
