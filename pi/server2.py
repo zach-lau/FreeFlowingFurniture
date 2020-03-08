@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-import sys.path.insert(1, '../common')
+import sys
+sys.path.insert(1, '../common')
 from motorcommands import *
 import socket
 import RF24
