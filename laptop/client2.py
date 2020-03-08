@@ -14,19 +14,33 @@ def connect(server_address):
 		s.connect((server_address, 5005))
 		return s
 	except: 
+		print("Error making socket")
 		return None
 
+def cli(sock):
+	# A command line interface that talks with the server
+	# sock : socket to communicate with 
+	line = input()
+	while line:
+		sock.sendall(bytes(line, 'utf-8'))
+		line = str(input())
+	sock.close()
+	print("Closing client")
+
 def main(): 
+	print("Connecting to server...")
 	s = connect(SERVER_ADDRESS)
 	if s == None:
 		return 
-	line = input()
-	while line:
-		s.sendall(bytes(line, 'utf-8'))
-		line = str(input())
-	s.close()
-	print("Closing client")
+	print("Connected to server")
+
+	#Everything from here out uses the server
+	try: 
+		cli(s)
+	except:
+		s.close()	
 
 
-if __name__ == '__main___':
+if __name__ == '__main__':
 	main()
+	print("Terminating program")
