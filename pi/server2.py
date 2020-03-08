@@ -30,7 +30,7 @@ while 1:
         data = conn.recv(32)
         #print(data)
         try:
-            received = struct.unpack("!iiiii",data)
+            received = struct.unpack("!BBBBBB",data)
             print(received)
             if not data:
                 break
@@ -40,8 +40,11 @@ while 1:
         try:
             #Send to arduino nano
             #output = bytes(received, "ASCII")
-            output = received
-            radio.write(bytes(received[0]))
+            output = []
+            for i in range(1,6):
+                output.append(received[i])
+            radio.write(bytes(output))
+            print(output)
         except:
             print("Couldn't send to nano")
     except:
