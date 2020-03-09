@@ -16,11 +16,18 @@ class controller:
 			"right" : self.right, 
 			"back" : self.back, 
 			"forward" : self.forward, 
-			"stop" : self.stop
+			"stop" : self.stop, 
+			"quit" : self.quit
 		}
 
 		self._conn = connection
 		self._radio = radio
+		self._bot = 1
+		
+		
+	def quit(self):
+		exit(0)
+			
 	def left(self):
 		self.send_direction("left")
 
@@ -36,8 +43,8 @@ class controller:
 	def stop(self):
 		self.send_direction("stop")
 
-	def set_bot(self):
-		pass
+	def set_bot(self, new_id):
+		self._bot = int(new_id)
 
 	def send_direction(self, direction):
 		print("Sending direction")
@@ -62,7 +69,7 @@ class controller:
 			right = 0
 			print("Unrecognized command")
 		print("Sending motor command")
-		cmd = motor_command(left, right)
+		cmd = motor_command(left, right, id = self._bot)
 		cmd.send(self._radio)
 
 
@@ -72,8 +79,11 @@ class controller:
 		if(args[0] in self._functions):
 			func = self._functions[args[0]]
 			print("\nCalling function %s with arguments: %s" % (func.__name__, (' '.join(args[1:]))))
-			func(*args[1:])
-
+			try:
+				func(*args[1:])
+			except:
+				print("Error executing command")
+			
 	def run(self): 
 		while 1:
 			#Receive from laptop
