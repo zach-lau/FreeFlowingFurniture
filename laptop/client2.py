@@ -35,11 +35,12 @@ def main():
 
 	#Everything from here out uses the server
 	try:
-		print("Running gui")
-		g = gui(s)
-		g.mainloop() 
-		# print("Starting cli")
-		# cli(s)
+		# print("Running gui")
+		# g = gui(s)
+		# g.mainloop() 
+		print("Starting cli")
+		interface = cli(s)
+		interface.run()
 	except:
 		s.close()	
 

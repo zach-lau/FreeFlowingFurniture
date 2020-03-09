@@ -8,31 +8,22 @@ from cli import *
 #User libraries
 from motorcommands import *
 
-commands = {38: "left", 25: "forward", 40: "right", 39: "back", 65: "stop"}
+key_to_command = {38: "left", 25: "forward", 40: "right", 39: "back", 65: "stop"}
 
 class gui: 
     def __init__(self, socket):
-        self._socket = socket
+        self._cli = cli(socket)
         pass
 
     def key_press(self, event):
         try:    
-            input = commands[event.keycode]
+            input = key_to_command[event.keycode]
         except:
             input = "stop"
-        left, right = parseInput(input)
-        command = motor_command(left, right)
-        try: 
-            command.send(self._socket)
-        except:
-            print("Unable to send command")
+        self._cli.send_direction(input)
     
     def key_release(self, event):
-        command = motor_command(0,0)
-        try: 
-            command.send(self._socket)
-        except:
-            print("Unable to send command")
+        self._cli.send_direction("stop")
 
     def mainloop(self): 
         root = tk.Tk()
