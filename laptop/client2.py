@@ -20,7 +20,7 @@ def connect(server_address):
 	try:
 		#Connect to the pi 
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.connect((server_address, 5005))
+		s.connect((server_address, 5006))
 		return s
 	except: 
 		print("Error making socket")
@@ -46,7 +46,7 @@ def main():
 		# g.mainloop() 
 		if interface_type == "gui":
 			print("Staring gui")
-			interface = gui(s)
+			interface = gui(s)	
 		else:
 			print("Starting cli")
 			interface = cli(s)
