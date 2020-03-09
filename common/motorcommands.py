@@ -1,6 +1,6 @@
 import socket 
 import struct
-import radio 
+import RF24
 
 class motor_command: 
 
