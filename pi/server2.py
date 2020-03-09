@@ -1,9 +1,15 @@
 #!/usr/bin/python3
+import sys
+sys.path.insert(1, '../common')
+from motorcommands import *
 import socket
 import RF24
 import RPi.GPIO as GPIO
 import time
 import struct
+
+# User libraries 
+from controller import *
 
 #Set up wifi stuff
 IPADDRESS = '192.168.1.65'
@@ -20,30 +26,9 @@ radio.begin()
 radio.setRetries(5,15)
 #Set up as transmitter
 radio.openWritingPipe(pipe)
+con = controller(conn, radio)
 
-while 1:
-    try:
-        #Receive from laptop
-        data = conn.recv(32)
-        #print(data)
-        try:
-            received = struct.unpack("!iiiii",data)
-            print(received)
-            if not data:
-                break
-        except:
-            print("Couldn't parse data")
-            break
-        try:
-            #Send to arduino nano
-            #output = bytes(received, "ASCII")
-            output = received
-            radio.write(bytes(received[0]))
-        except:
-            print("Couldn't send to nano")
-    except:
-        print("\nError")
-        break
-
+con.run()
+print("Shutting down server")
 s.close()
 conn.close()

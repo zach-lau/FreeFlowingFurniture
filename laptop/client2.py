@@ -1,7 +1,15 @@
 #!/usr/bin/python3
-import tkinter as tk
+
+#System libraries 
+import sys
+sys.path.insert(1, '../common')
 import socket
-from motorcommands import *
+import tkinter as tk
+
+#User libraries
+# from motorcommands import *
+from cli import *
+from gui import *
 
 SERVER_ADDRESS = "192.168.1.65"
 
@@ -18,48 +26,13 @@ def connect(server_address):
 		print("Error making socket")
 		return None
 
-def parseInput(line): 
-	# Turns a users command line input into an appropriate integer output
-	# If the command is not valid it will output 0 and notify the user of an unrecognized command
-
-	if line == "forward": 
-		left = 255
-		right = 255
-	elif line == "right":
-		left = -255
-		right = 255
-	elif line == "left":
-		left = 255
-		right = -255
-	elif line == "back": 
-		left = -255
-		right = -255
-	else: 
-		left = 0
-		right = 0
-		print("Unrecognized command")
-	return (left, right)
-
-def cli(sock):
-	# A command line interface that talks with the server
-	# sock : socket to communicate with 
-	line = input()
-	# left : left motor pwm from -255 to 255
-	# right : right motor pwm from -255 to 255
-
-	while line:
-		left, right = parseInput(line)
-		command = motor_command(left, right)
-		try: 
-			command.send(sock)
-		except:
-			print("Unable to send command")
-		#sock.sendall(bytes(line, 'utf-8'))
-		line = str(input())
-	sock.close()
-	print("Closing client")
-
 def main(): 
+
+	try: 
+		interface_type = sys.argv[1]
+	except:
+		interface_type = "cli"
+
 	print("Connecting to server...")
 	s = connect(SERVER_ADDRESS)
 	if s == None:
@@ -67,8 +40,18 @@ def main():
 	print("Connected to server")
 
 	#Everything from here out uses the server
-	try: 
-		cli(s)
+	try:
+		# print("Running gui")
+		# g = gui(s)
+		# g.mainloop() 
+		if interface_type == "gui":
+			print("Staring gui")
+			interface = gui(s)
+		else:
+			print("Starting cli")
+			interface = cli(s)
+		interface.run()
+
 	except:
 		s.close()	
 
