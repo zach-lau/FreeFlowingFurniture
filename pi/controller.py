@@ -5,10 +5,9 @@ import RF24
 
 class controller:
     
-    def __init__(self, connection, radio):
+	def __init__(self, connection, radio):
 
-        self._functions = { 
-			"move": self.move, 
+		self._functions = { 
 			"set_bot": self.set_bot, 
 			"left" : self.left, 
 			"right" : self.right, 
@@ -17,10 +16,9 @@ class controller:
 			"stop" : self.stop
 		}
 
-        self._conn = connection
-        self._radio = radio
-
-    def left(self):
+		self._conn = connection
+		self._radio = radio
+	def left(self):
 		self.send_direction("left")
 
 	def right(self):
@@ -38,7 +36,8 @@ class controller:
 	def set_bot(self):
 		pass
 
-    def send_direction(self, direction):
+	def send_direction(self, direction):
+		print("Sendig direction")
 		max_out = 200
 		if direction == "forward": 
 			left = max_out
@@ -61,11 +60,11 @@ class controller:
 			print("Unrecognized command")
 		command = motorcommand(left, right)
 
-    	
+
 	def parse_input(self, line):
 		args = line.strip().split()
-		# print("Args is ")
-		# print(args)
+		print("Args is ")
+		print(args)
 		# Get the function to run from the dictionary 
 		if(args[0] in self._functions):
 			func = self._functions[args[0]]
@@ -75,31 +74,31 @@ class controller:
 			print(*args[1:])
 			func(*args[1:])
 
-    def run(self): 
-        try:
-            #Receive from laptop
-            data = self._conn.recv(32)
-            #print(data)
-            try:
-                if not data:
-                    return
-                print(data)
-                line = data.decode('utf-8')
-                parse_input(line)
-                
-            except:
-                print("Couldn't parse data")
-                return
-            try:
-                #Send to arduino nano
-                #output = bytes(received, "ASCII")
-                output = []
-                for i in range(1,6):
-                    output.append(received[i])
-                radio.write(bytes(output))
-                print(output)
-            except:
-                print("Couldn't send to nano")
-        except:
-            print("\nError")
-            return
+	def run(self): 
+		while 1:
+			try:
+				#Receive from laptop
+				data = self._conn.recv(32)
+				#print(data)
+				try:
+					if not data:
+						return
+					print(data)
+					line = data.decode('utf-8')
+					self.parse_input(line)
+				
+				except:
+					return
+				try:
+					#Send to arduino nano
+					#output = bytes(received, "ASCII")
+					output = []
+					for i in range(1,6):
+					    output.append(received[i])
+					radio.write(bytes(output))
+					print(output)
+				except:
+					print("Couldn't send to nano")
+			except:
+			    print("\nError")
+			    return

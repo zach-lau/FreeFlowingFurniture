@@ -26,10 +26,9 @@ radio.begin()
 radio.setRetries(5,15)
 #Set up as transmitter
 radio.openWritingPipe(pipe)
-con = controller(conn)
+con = controller(conn, radio)
 
-while 1:
-   con.run()
+con.run()
 
 s.close()
 conn.close()
