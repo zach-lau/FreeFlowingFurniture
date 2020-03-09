@@ -1,7 +1,10 @@
 # Controlls the pi and parses inputs
 
+import sys
 import socket 
 import RF24
+sys.path.insert(1, '../common')
+from motorcommands import *
 
 class controller:
     
@@ -37,7 +40,7 @@ class controller:
 		pass
 
 	def send_direction(self, direction):
-		print("Sendig direction")
+		print("Sending direction")
 		max_out = 200
 		if direction == "forward": 
 			left = max_out
@@ -58,47 +61,31 @@ class controller:
 			left = 0
 			right = 0
 			print("Unrecognized command")
-		command = motorcommand(left, right)
+		print("Sending motor command")
+		cmd = motor_command(left, right)
+		cmd.send(self._radio)
 
 
 	def parse_input(self, line):
 		args = line.strip().split()
-		print("Args is ")
-		print(args)
 		# Get the function to run from the dictionary 
 		if(args[0] in self._functions):
 			func = self._functions[args[0]]
-			print("Func is ")
-			print(func.__name__)
-			print("args are")
-			print(*args[1:])
+			print("\nCalling function %s with arguments: %s" % (func.__name__, (' '.join(args[1:]))))
 			func(*args[1:])
 
 	def run(self): 
 		while 1:
+			#Receive from laptop
+			data = self._conn.recv(32)
+			#print(data)
 			try:
-				#Receive from laptop
-				data = self._conn.recv(32)
-				#print(data)
-				try:
-					if not data:
-						return
-					print(data)
-					line = data.decode('utf-8')
-					self.parse_input(line)
-				
-				except:
+				if not data:
 					return
-				try:
-					#Send to arduino nano
-					#output = bytes(received, "ASCII")
-					output = []
-					for i in range(1,6):
-					    output.append(received[i])
-					radio.write(bytes(output))
-					print(output)
-				except:
-					print("Couldn't send to nano")
+				line = data.decode('utf-8')
+				print("Received command: " + line)
+				self.parse_input(line)
+			
 			except:
-			    print("\nError")
-			    return
+				print("Error with command")
+				return

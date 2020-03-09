@@ -29,6 +29,6 @@ radio.openWritingPipe(pipe)
 con = controller(conn, radio)
 
 con.run()
-
+print("Shutting down server")
 s.close()
 conn.close()
