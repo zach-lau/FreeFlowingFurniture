@@ -7,7 +7,7 @@ import socket
 import tkinter as tk
 
 #User libraries
-from motorcommands import *
+# from motorcommands import *
 from cli import *
 from gui import *
 
@@ -27,6 +27,12 @@ def connect(server_address):
 		return None
 
 def main(): 
+
+	try: 
+		interface_type = sys.argv[1]
+	except:
+		interface_type = "cli"
+
 	print("Connecting to server...")
 	s = connect(SERVER_ADDRESS)
 	if s == None:
@@ -38,9 +44,14 @@ def main():
 		# print("Running gui")
 		# g = gui(s)
 		# g.mainloop() 
-		print("Starting cli")
-		interface = cli(s)
+		if interface_type == "gui":
+			print("Staring gui")
+			interface = gui(s)
+		else:
+			print("Starting cli")
+			interface = cli(s)
 		interface.run()
+
 	except:
 		s.close()	
 
