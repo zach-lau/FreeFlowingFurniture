@@ -36,6 +36,9 @@ class cli:
 	def stop(self):
 		self.send_direction("stop")
 
+	def set_bot(self):
+		pass
+
 	def send_direction(self, direction):
 		max_out = 200
 		if direction == "forward": 
@@ -68,8 +71,6 @@ class cli:
 	def move(self, direction):
 		self.send_direction(direction)
 
-	def set_bot(self):
-		pass 
 	
 	def parse_input(self, line):
 		args = line.strip().split()
@@ -92,8 +93,7 @@ class cli:
 		# right : right motor pwm from -255 to 255
 
 		while line:
-			self.parse_input(line)
-			#sock.sendall(bytes(line, 'utf-8'))
+			self._sock.sendall(bytes(line, 'utf-8'))
 			line = str(input())
 
 		self._sock.close()

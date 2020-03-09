@@ -1,5 +1,6 @@
 import socket 
 import struct
+import radio 
 
 class motor_command: 
 
@@ -11,7 +12,8 @@ class motor_command:
         self._righta = max(0, right)
         self._rightb = max(0, -right)
 
-    def send(self, sock): 
+    def send(self, radio): 
         print("Send command...")
+        radio.write((self._id, self._lefta, self._leftb, self._righta, self._rightb))
        # print("%d %d %d %d %d %d" % (self._heartbeat, self._id, self._lefta, self._leftb, self._righta, self._rightb))
-        sock.sendall(struct.pack("!BBBBBB", self._heartbeat, self._id, self._lefta, self._leftb, self._righta, self._rightb))
+        # sock.sendall(struct.pack("!BBBBBB", self._heartbeat, self._id, self._lefta, self._leftb, self._righta, self._rightb))
