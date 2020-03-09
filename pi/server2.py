@@ -8,6 +8,9 @@ import RPi.GPIO as GPIO
 import time
 import struct
 
+# User libraries 
+from controller import *
+
 #Set up wifi stuff
 IPADDRESS = '192.168.1.65'
 print("Starting our server")
@@ -23,33 +26,10 @@ radio.begin()
 radio.setRetries(5,15)
 #Set up as transmitter
 radio.openWritingPipe(pipe)
+con = controller(conn)
 
 while 1:
-    try:
-        #Receive from laptop
-        data = conn.recv(32)
-        #print(data)
-        try:
-            received = struct.unpack("!BBBBBB",data)
-            print(received)
-            if not data:
-                break
-        except:
-            print("Couldn't parse data")
-            break
-        try:
-            #Send to arduino nano
-            #output = bytes(received, "ASCII")
-            output = []
-            for i in range(1,6):
-                output.append(received[i])
-            radio.write(bytes(output))
-            print(output)
-        except:
-            print("Couldn't send to nano")
-    except:
-        print("\nError")
-        break
+   con.run()
 
 s.close()
 conn.close()
