@@ -13,8 +13,7 @@ class controller:
             data = self._conn.recv(32)
             #print(data)
             try:
-                received = struct.unpack("!BBBBBB",data)
-                print(received)
+                print(data)
                 if not data:
                     return
             except:
