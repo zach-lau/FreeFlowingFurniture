@@ -15,7 +15,7 @@ from controller import *
 IPADDRESS = '192.168.1.65'
 print("Starting our server")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((IPADDRESS,5005))
+s.bind((IPADDRESS,5006))
 s.listen(1)
 conn, addr = s.accept()
 

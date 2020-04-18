@@ -1,10 +1,13 @@
 # Controlls the pi and parses inputs
 
+import cv2 as cv
 import sys
 import socket 
 import RF24
 sys.path.insert(1, '../common')
 from motorcommands import *
+
+
 
 class controller:
     
@@ -17,13 +20,20 @@ class controller:
 			"back" : self.back, 
 			"forward" : self.forward, 
 			"stop" : self.stop, 
-			"quit" : self.quit
+			"quit" : self.quit,
+			"image" : self.image
 		}
 
 		self._conn = connection
 		self._radio = radio
 		self._bot = 1
+		self._vid = cv.VideoCapture(0)
+		self._window = cv.namedWindow("Image", cv.WINDOW_AUTOSIZE)
+		# self._window = cv.namedWindow("400")
 		
+	def image(self):
+		ret, frame = self._vid.read()
+		# cv.imshow("Bots", frame)
 		
 	def quit(self):
 		exit(0)

@@ -31,7 +31,12 @@ numbers = {
 class gui: 
     def __init__(self, socket):
         self._cli = cli(socket)
+        self._root = tk.Tk()
         pass
+
+    def update_image(self):
+        self._cli.send("image")
+        self._root.after(10, self.update_image)
 
     def key_press(self, event):
         keycode = event.keycode
@@ -51,9 +56,9 @@ class gui:
         self._cli.send(input)
 
     def run(self): 
-        root = tk.Tk()
         label = tk.Label(text = "GUI", width = 100, height = 40)
         label.pack()
-        root.bind('<KeyPress>', self.key_press)
+        self.update_image()
+        self._root.bind('<KeyPress>', self.key_press)
         #root.bind('<KeyRelease>', self.key_release)
-        root.mainloop()
+        self._root.mainloop()
